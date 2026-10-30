@@ -1,0 +1,6 @@
+User-agent: *
+Disallow: /*?
+Disallow: /filter/
+Disallow: /*utm=
+
+Sitemap: https://vodds.pt/sitemap.xml
