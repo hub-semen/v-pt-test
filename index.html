@@ -9,6 +9,7 @@
 <link rel="icon" type="image/png" sizes="192x192" href="assets/android-chrome-192x192.png?v=5">
 <link rel="manifest" href="site.webmanifest?v=5">
 <script src="./support.js"></script>
+<script src="assets/livechat.js" defer></script>
 </head>
 <body>
 <x-dc>
@@ -167,9 +168,10 @@ a:hover{color:var(--red2)}
 @media (max-width:760px){#vof [data-cols]{grid-template-columns:1fr 1fr!important}}
 @media (max-width:640px){#vof [data-bottom-spacer]{display:block!important}}
 
-  /* Chat widget channels: red glow so Telegram / WhatsApp stand out */
+  /* Chat widget channels: red glow so Telegram / WhatsApp / Chat em direto stand out */
   [data-chat-widget] .chat-pill{display:flex;align-items:center;gap:9px;height:40px;padding:0 16px 0 5px;border:1px solid rgba(255,41,41,.6);border-radius:20px;background:linear-gradient(90deg,rgba(255,41,41,.2),#12161c 75%);color:#fff;font-size:12px;font-weight:800;font-family:inherit;cursor:pointer;box-shadow:0 0 16px rgba(255,41,41,.35),0 24px 60px rgba(0,0,0,.6);transition:transform .15s,box-shadow .15s,border-color .15s;animation:chatPillIn .25s ease-out both}
   [data-chat-widget] .chat-pill:nth-child(2){animation-delay:.05s}
+  [data-chat-widget] .chat-pill:nth-child(3){animation-delay:.1s}
   [data-chat-widget] .chat-pill:hover{border-color:#ff2929;box-shadow:0 0 26px rgba(255,41,41,.6),0 24px 60px rgba(0,0,0,.6);transform:translateX(-3px)}
   [data-chat-widget] .chat-pill-ic{width:30px;height:30px;flex:none;border-radius:50%;background:#ff2929;display:grid;place-items:center;box-shadow:0 0 10px rgba(255,41,41,.7)}
   [data-chat-widget] .chat-pill-ic svg{width:16px;height:16px;display:block}
@@ -319,6 +321,7 @@ a:hover{color:var(--red2)}
         <div style="display:grid;gap:8px;justify-items:end">
           <a href="https://t.me/+eCAiWVjY78w5ZWNl" target="_blank" class="chat-pill"><span class="chat-pill-ic"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="#fff" d="M21.4 3.6 2.9 10.8c-1 .4-1 1.6.1 1.9l4.6 1.5 1.8 5.6c.3.8 1.3 1 1.9.4l2.6-2.5 4.7 3.5c.7.5 1.6.1 1.8-.7l3.1-15.1c.2-1.1-.9-2-1.9-1.6ZM9.6 14.2l8.6-7.7-6.9 9.1-.3 2.9z"/></svg></span>Telegram</a>
           <a href="https://wa.me/639178372617" target="_blank" class="chat-pill"><span class="chat-pill-ic"><svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="#fff" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M3.5 20.5l1.3-4.2A8.5 8.5 0 1 1 8 19.4z"/><path d="M9 8.6c0 3.6 2.8 6.4 6.4 6.4l1-1.6-2-1-1 .8a4.6 4.6 0 0 1-2.6-2.6l.8-1-1-2z" fill="#fff" stroke-width="1"/></svg></span>WhatsApp</a>
+          <button type="button" onClick="{{ hdrOpenLiveChat }}" class="chat-pill"><span class="chat-pill-ic"><svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="#fff" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M20.5 11.8a7.6 7.6 0 0 1-11.1 6.8L4.5 20l1.4-4.3A7.6 7.6 0 1 1 20.5 11.8z"/><path d="M8.6 11.9h.01M12 11.9h.01M15.4 11.9h.01" stroke-width="2.6"/></svg></span>Chat em direto</button>
         </div>
       </sc-if>
       <button aria-label="Chat em direto" title="Chat em direto" onClick="{{ hdrToggleChat }}" style="width:56px;height:56px;border-radius:50%;background:none;border:0;padding:0;cursor:pointer;display:grid;place-items:center;box-shadow:0 10px 26px rgba(255,41,41,.4)">
@@ -1600,7 +1603,8 @@ class Component extends DCLogic {
       hdrLangOpen: this.state.hdrLangOpen,
       hdrToggleLang: () => this.setState(s => ({ hdrLangOpen: !s.hdrLangOpen })),
       hdrChatOpen: this.state.hdrChatOpen,
-      hdrToggleChat: () => this.setState(s => ({ hdrChatOpen: !s.hdrChatOpen })),
+      hdrToggleChat: () => { const lc = window.VoddsLiveChat; if (lc && lc.isOpen()) { lc.close(); this.setState({ hdrChatOpen: false }); return; } this.setState(s => ({ hdrChatOpen: !s.hdrChatOpen })); },
+      hdrOpenLiveChat: () => { this.setState({ hdrChatOpen: false }); window.VoddsLiveChat && window.VoddsLiveChat.open(); },
       chatFab:s.chat==="fab", chatTab:s.chat==="tab", chatOpen:s.chat==="open",
       channelsOpen:!!s.channels, toggleChannels:()=>this.setState({channels:!s.channels}),
       hideChat:()=>this.setState({chat:"tab"}), showChatFab:()=>this.setState({chat:"fab"}),
