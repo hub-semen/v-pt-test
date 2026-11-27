@@ -1,6 +1,9 @@
+# Test site: closed from indexing. Pages carry <meta name="robots" content="noindex, nofollow">.
+# Crawling is intentionally allowed so search engines can read the noindex tag.
+# On launch: restore the rules below and switch pages to "index, follow".
+#   Disallow: /*?
+#   Disallow: /filter/
+#   Disallow: /*utm=
+#   Sitemap: https://vodds.bet/sitemap.xml
 User-agent: *
-Disallow: /*?
-Disallow: /filter/
-Disallow: /*utm=
-
-Sitemap: https://vodds.pt/sitemap.xml
+Disallow:
